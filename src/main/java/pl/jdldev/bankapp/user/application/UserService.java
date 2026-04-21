@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.jdldev.bankapp.common.exception.EmailAlreadyExistsException;
 import pl.jdldev.bankapp.user.api.RegisterUserRequest;
 import pl.jdldev.bankapp.user.domain.User;
 import pl.jdldev.bankapp.user.domain.UserRole;
@@ -22,7 +23,7 @@ public class UserService {
     @Transactional
     public void register(RegisterUserRequest registerUserRequest) {
         if (userRepository.existsByEmail(registerUserRequest.email())) {
-            throw new IllegalArgumentException("Given email already exists.");
+            throw new EmailAlreadyExistsException(registerUserRequest.email());
         }
 
         User user = new User(
