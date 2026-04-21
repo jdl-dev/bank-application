@@ -27,6 +27,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private UserStatus userStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserRole role;
 
     @Column(name = "created_at",  nullable = false, updatable = false)
@@ -35,9 +39,10 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    public User(String email, String passwordHash, UserRole role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(String email, String passwordHash, UserStatus status, UserRole role, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.email = email;
         this.passwordHash = passwordHash;
+        this.userStatus = status;
         this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
