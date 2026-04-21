@@ -1,4 +1,4 @@
-package com.app.bankapp;
+package pl.jdldev.bankapp;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
