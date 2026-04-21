@@ -2,9 +2,8 @@ package pl.jdldev.bankapp.user.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import pl.jdldev.bankapp.user.application.UserService;
 
 @RestController
@@ -14,6 +13,8 @@ public class UserController {
 
     private final UserService userService;
 
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public void register(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
         userService.register(registerUserRequest);
     }
