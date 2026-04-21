@@ -27,7 +27,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserStatus userStatus;
+    private UserStatus status;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -42,7 +42,7 @@ public class User {
     public User(String email, String passwordHash, UserStatus status, UserRole role, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.email = email;
         this.passwordHash = passwordHash;
-        this.userStatus = status;
+        this.status = status;
         this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
