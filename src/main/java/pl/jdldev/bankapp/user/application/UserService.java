@@ -1,6 +1,9 @@
 package pl.jdldev.bankapp.user.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,5 +53,12 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
         return userMapper.toResponse(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UserResponse> getUsers(Pageable pageable) {
+        return userRepository
+                .findAll(pageable)
+                .map(userMapper::toResponse);
     }
 }

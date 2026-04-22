@@ -3,6 +3,8 @@ package pl.jdldev.bankapp.user.api;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.jdldev.bankapp.user.application.UserService;
@@ -23,5 +25,10 @@ public class UserController {
     @GetMapping("/{id}")
     public UserResponse getUser(@PathVariable long id) {
         return userService.getUseryId(id);
+    }
+
+    @GetMapping
+    public Page<UserResponse> getUsers(Pageable pageable) {
+        return userService.getUsers(pageable);
     }
 }
