@@ -34,13 +34,13 @@ public class BankAccountController {
         return bankAccountService.getBankAccounts(pageable);
     }
 
-    @PostMapping("/{id}/status")
+    @PatchMapping("/{id}/status")
     @ResponseStatus(HttpStatus.OK)
     public BankAccountResponse updateBankAccountStatus(@PathVariable Long id, @Valid @RequestBody UpdateBankAccountStatusRequest request) {
         return bankAccountService.updateBankAccountStatus(id, request);
     }
 
-    @PostMapping("/{id}/currency")
+    @PatchMapping("/{id}/currency")
     @ResponseStatus(HttpStatus.OK)
     public BankAccountResponse updateBankAccountCurrency(@PathVariable Long id, @Valid @RequestBody UpdateBankAccountCurrencyRequest request) {
         return bankAccountService.updateBankAccountCurrency(id, request);
