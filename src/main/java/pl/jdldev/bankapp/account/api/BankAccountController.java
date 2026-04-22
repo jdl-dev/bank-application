@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.jdldev.bankapp.account.application.BankAccountService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/accounts")
 @RequiredArgsConstructor
@@ -44,5 +46,11 @@ public class BankAccountController {
     @ResponseStatus(HttpStatus.OK)
     public BankAccountResponse updateBankAccountCurrency(@PathVariable Long id, @Valid @RequestBody UpdateBankAccountCurrencyRequest request) {
         return bankAccountService.updateBankAccountCurrency(id, request);
+    }
+
+    @GetMapping("/owner/{ownerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<BankAccountResponse> getBankAccountsByOwnerId(@PathVariable Long ownerId, Pageable pageable) {
+        return bankAccountService.listOfUsersAccounts(ownerId, pageable);
     }
 }

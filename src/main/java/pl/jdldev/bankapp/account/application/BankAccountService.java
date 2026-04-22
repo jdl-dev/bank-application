@@ -96,6 +96,18 @@ public class BankAccountService {
         return bankAccountMapper.toResponse(bankAccountToUpdate);
     }
 
+    @Transactional(readOnly = true)
+    public Page<BankAccountResponse> listOfUsersAccounts(Long bankAccountOwnerId, Pageable pageable) {
+
+        if(!userRepository.existsById(bankAccountOwnerId)) {
+            throw new UserNotFoundException(bankAccountOwnerId);
+        }
+
+        return bankAccountRepository
+                .findAllByOwnerId(bankAccountOwnerId, pageable)
+                .map(bankAccountMapper::toResponse);
+    }
+
     private String generateBankAccountNumber() {
 
         String accountNumber;
