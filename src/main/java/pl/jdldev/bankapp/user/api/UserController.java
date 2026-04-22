@@ -23,11 +23,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public UserResponse getUser(@PathVariable long id) {
         return userService.getUseryId(id);
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Page<UserResponse> getUsers(Pageable pageable) {
         return userService.getUsers(pageable);
     }
