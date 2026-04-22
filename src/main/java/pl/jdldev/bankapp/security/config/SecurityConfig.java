@@ -17,7 +17,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/users/register").permitAll()
                         .requestMatchers("/api/v1/users/*").permitAll()
-                        .anyRequest().denyAll())
+                        .anyRequest().permitAll())
                 .build();
     }
 }
