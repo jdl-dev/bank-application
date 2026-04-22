@@ -13,15 +13,15 @@ public class BankAccountController {
 
     private final BankAccountService bankAccountService;
 
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BankAccountResponse createBankAccount(@Valid @RequestBody CreatBankAccountRequest request) {
         return bankAccountService.createBankAccount(request);
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BankAccountResponse getBankAccountById(@Valid @PathVariable GetBankAccountByIdRequest request) {
-        return bankAccountService.getBankAccountById(request);
+    public BankAccountResponse getBankAccountById(@PathVariable Long id) {
+        return bankAccountService.getBankAccountById(id);
     }
 }
