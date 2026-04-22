@@ -2,6 +2,9 @@ package pl.jdldev.bankapp.account.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.jdldev.bankapp.account.application.BankAccountService;
@@ -23,5 +26,11 @@ public class BankAccountController {
     @ResponseStatus(HttpStatus.OK)
     public BankAccountResponse getBankAccountById(@PathVariable Long id) {
         return bankAccountService.getBankAccountById(id);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Page<BankAccountResponse> getBankAccounts(Pageable pageable) {
+        return bankAccountService.getBankAccounts(pageable);
     }
 }

@@ -1,6 +1,8 @@
 package pl.jdldev.bankapp.account.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.jdldev.bankapp.account.api.BankAccountResponse;
@@ -16,6 +18,7 @@ import pl.jdldev.bankapp.user.infrastructure.UserRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -56,6 +59,14 @@ public class BankAccountService {
                 .orElseThrow(() -> new BankAccountNotFoundException(bankAccountId));
 
         return bankAccountMapper.toResponse(bankAccount);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<BankAccountResponse> getBankAccounts(Pageable  pageable) {
+
+        return bankAccountRepository
+                .findAll(pageable)
+                .map(bankAccountMapper::toResponse);
     }
 
     private String generateBankAccountNumber() {
