@@ -1,6 +1,7 @@
 package pl.jdldev.bankapp.user.api;
 
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,5 +18,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse register(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
         return userService.register(registerUserRequest);
+    }
+
+    @GetMapping("/{id}")
+    public UserResponse getUser(@PathVariable long id) {
+        return userService.getUseryId(id);
     }
 }

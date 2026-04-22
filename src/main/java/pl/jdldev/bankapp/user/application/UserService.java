@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.jdldev.bankapp.common.exception.EmailAlreadyExistsException;
+import pl.jdldev.bankapp.common.exception.UserNotFoundException;
 import pl.jdldev.bankapp.user.api.RegisterUserRequest;
 import pl.jdldev.bankapp.user.api.UserResponse;
 import pl.jdldev.bankapp.user.domain.User;
@@ -40,5 +41,14 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         return userMapper.toResponse(savedUser);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse getUseryId(long userId) {
+        User user = userRepository
+                .getUserById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        return userMapper.toResponse(user);
     }
 }
