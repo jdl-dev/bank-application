@@ -18,4 +18,10 @@ public class BankAccountController {
     public BankAccountResponse createBankAccount(@Valid @RequestBody CreatBankAccountRequest request) {
         return bankAccountService.createBankAccount(request);
     }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public BankAccountResponse getBankAccountById(@Valid @PathVariable GetBankAccountByIdRequest request) {
+        return bankAccountService.getBankAccountById(request);
+    }
 }

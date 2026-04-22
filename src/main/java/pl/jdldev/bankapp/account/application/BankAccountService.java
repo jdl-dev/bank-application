@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.jdldev.bankapp.account.api.BankAccountResponse;
 import pl.jdldev.bankapp.account.api.CreatBankAccountRequest;
+import pl.jdldev.bankapp.account.api.GetBankAccountByIdRequest;
 import pl.jdldev.bankapp.account.domain.AccountStatus;
 import pl.jdldev.bankapp.account.domain.BankAccount;
 import pl.jdldev.bankapp.account.infrastructure.BankAccountRepository;
 import pl.jdldev.bankapp.account.mapper.BankAccountMapper;
+import pl.jdldev.bankapp.common.exception.BankAccountNotFoundException;
 import pl.jdldev.bankapp.common.exception.UserNotFoundException;
 import pl.jdldev.bankapp.user.domain.User;
 import pl.jdldev.bankapp.user.infrastructure.UserRepository;
@@ -43,6 +45,15 @@ public class BankAccountService {
         BankAccount savedBankAccount = bankAccountRepository.save(newBankAccount);
 
         return bankAccountMapper.toResponse(savedBankAccount);
+    }
+
+    public BankAccountResponse getBankAccountById(GetBankAccountByIdRequest getBankAccountByIdRequest) {
+
+        BankAccount bankAccount = bankAccountRepository
+                .getBankAccountById(getBankAccountByIdRequest.id())
+                .orElseThrow(() -> new BankAccountNotFoundException(getBankAccountByIdRequest.id()));
+
+        return bankAccountMapper.toResponse(bankAccount);
     }
 
     private String generateBankAccountNumber() {
