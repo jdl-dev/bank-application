@@ -3,13 +3,11 @@ package pl.jdldev.bankapp.account.api;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.jdldev.bankapp.account.application.BankAccountService;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/accounts")
@@ -52,5 +50,11 @@ public class BankAccountController {
     @ResponseStatus(HttpStatus.OK)
     public Page<BankAccountResponse> getBankAccountsByOwnerId(@PathVariable Long ownerId, Pageable pageable) {
         return bankAccountService.listOfUsersAccounts(ownerId, pageable);
+    }
+
+    @PatchMapping("/close/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public BankAccountResponse deleteBankAccountById(@PathVariable Long id) {
+        return bankAccountService.closeBankAccountById(id);
     }
 }

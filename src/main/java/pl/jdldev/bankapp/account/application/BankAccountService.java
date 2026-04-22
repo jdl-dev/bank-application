@@ -14,6 +14,7 @@ import pl.jdldev.bankapp.account.domain.BankAccount;
 import pl.jdldev.bankapp.account.infrastructure.BankAccountRepository;
 import pl.jdldev.bankapp.account.mapper.BankAccountMapper;
 import pl.jdldev.bankapp.common.exception.BankAccountNotFoundException;
+import pl.jdldev.bankapp.common.exception.CannotCloseBankAccountException;
 import pl.jdldev.bankapp.common.exception.UserNotFoundException;
 import pl.jdldev.bankapp.user.domain.User;
 import pl.jdldev.bankapp.user.infrastructure.UserRepository;
@@ -106,6 +107,26 @@ public class BankAccountService {
         return bankAccountRepository
                 .findAllByOwnerId(bankAccountOwnerId, pageable)
                 .map(bankAccountMapper::toResponse);
+    }
+
+    @Transactional
+    public BankAccountResponse closeBankAccountById(Long bankAccountIdToBeClosed) {
+
+        BankAccount bankAccountToBeClosed = bankAccountRepository
+                .getBankAccountById(bankAccountIdToBeClosed)
+                .orElseThrow(() -> new BankAccountNotFoundException(bankAccountIdToBeClosed));
+
+        if(bankAccountToBeClosed.getBalance().compareTo(BigDecimal.ZERO) > 0) {
+            throw new CannotCloseBankAccountException("Bank account with positive balance cannot be closed");
+        }
+
+        if(bankAccountToBeClosed.getStatus().equals(AccountStatus.CLOSED)) {
+            throw new CannotCloseBankAccountException("Bank account is already closed");
+        }
+
+        bankAccountToBeClosed.setStatus(AccountStatus.CLOSED);
+
+        return bankAccountMapper.toResponse(bankAccountToBeClosed);
     }
 
     private String generateBankAccountNumber() {
