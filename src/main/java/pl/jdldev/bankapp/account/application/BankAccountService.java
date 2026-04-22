@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.jdldev.bankapp.account.api.BankAccountResponse;
 import pl.jdldev.bankapp.account.api.CreatBankAccountRequest;
+import pl.jdldev.bankapp.account.api.UpdateBankAccountCurrencyRequest;
+import pl.jdldev.bankapp.account.api.UpdateBankAccountStatusRequest;
 import pl.jdldev.bankapp.account.domain.AccountStatus;
 import pl.jdldev.bankapp.account.domain.BankAccount;
 import pl.jdldev.bankapp.account.infrastructure.BankAccountRepository;
@@ -18,7 +20,6 @@ import pl.jdldev.bankapp.user.infrastructure.UserRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -67,6 +68,32 @@ public class BankAccountService {
         return bankAccountRepository
                 .findAll(pageable)
                 .map(bankAccountMapper::toResponse);
+    }
+
+    @Transactional
+    public BankAccountResponse updateBankAccountStatus(Long bankAccountToUpdateId, UpdateBankAccountStatusRequest updateBankAccountStatusRequest) {
+
+        BankAccount bankAccountToUpdate = bankAccountRepository
+                .getBankAccountById(bankAccountToUpdateId)
+                .orElseThrow(() -> new BankAccountNotFoundException(bankAccountToUpdateId));
+
+        bankAccountToUpdate.setStatus(updateBankAccountStatusRequest.accountStatus());
+        bankAccountToUpdate.setUpdatedAt(LocalDateTime.now());
+
+        return bankAccountMapper.toResponse(bankAccountToUpdate);
+    }
+
+    @Transactional
+    public BankAccountResponse updateBankAccountCurrency(Long bankAccountToUpdateId, UpdateBankAccountCurrencyRequest updateBankAccountCurrencyRequest) {
+
+        BankAccount bankAccountToUpdate = bankAccountRepository
+                .getBankAccountById(bankAccountToUpdateId)
+                .orElseThrow(() -> new BankAccountNotFoundException(bankAccountToUpdateId));
+
+        bankAccountToUpdate.setCurrency(updateBankAccountCurrencyRequest.currencyCode());
+        bankAccountToUpdate.setUpdatedAt(LocalDateTime.now());
+
+        return bankAccountMapper.toResponse(bankAccountToUpdate);
     }
 
     private String generateBankAccountNumber() {

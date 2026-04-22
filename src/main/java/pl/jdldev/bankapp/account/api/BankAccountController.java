@@ -33,4 +33,16 @@ public class BankAccountController {
     public Page<BankAccountResponse> getBankAccounts(Pageable pageable) {
         return bankAccountService.getBankAccounts(pageable);
     }
+
+    @PostMapping("/{id}/status")
+    @ResponseStatus(HttpStatus.OK)
+    public BankAccountResponse updateBankAccountStatus(@PathVariable Long id, @Valid @RequestBody UpdateBankAccountStatusRequest request) {
+        return bankAccountService.updateBankAccountStatus(id, request);
+    }
+
+    @PostMapping("/{id}/currency")
+    @ResponseStatus(HttpStatus.OK)
+    public BankAccountResponse updateBankAccountCurrency(@PathVariable Long id, @Valid @RequestBody UpdateBankAccountCurrencyRequest request) {
+        return bankAccountService.updateBankAccountCurrency(id, request);
+    }
 }
