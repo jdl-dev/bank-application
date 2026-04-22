@@ -2,9 +2,9 @@ package pl.jdldev.bankapp.account.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.jdldev.bankapp.account.api.BankAccountResponse;
 import pl.jdldev.bankapp.account.api.CreatBankAccountRequest;
-import pl.jdldev.bankapp.account.api.GetBankAccountByIdRequest;
 import pl.jdldev.bankapp.account.domain.AccountStatus;
 import pl.jdldev.bankapp.account.domain.BankAccount;
 import pl.jdldev.bankapp.account.infrastructure.BankAccountRepository;
@@ -26,6 +26,7 @@ public class BankAccountService {
     private final UserRepository userRepository;
     private final BankAccountMapper bankAccountMapper;
 
+    @Transactional
     public BankAccountResponse createBankAccount(CreatBankAccountRequest createBankAccountRequest) {
 
         User accountOwner = userRepository
@@ -47,11 +48,12 @@ public class BankAccountService {
         return bankAccountMapper.toResponse(savedBankAccount);
     }
 
-    public BankAccountResponse getBankAccountById(GetBankAccountByIdRequest getBankAccountByIdRequest) {
+    @Transactional(readOnly = true)
+    public BankAccountResponse getBankAccountById(Long bankAccountId) {
 
         BankAccount bankAccount = bankAccountRepository
-                .getBankAccountById(getBankAccountByIdRequest.id())
-                .orElseThrow(() -> new BankAccountNotFoundException(getBankAccountByIdRequest.id()));
+                .getBankAccountById(bankAccountId)
+                .orElseThrow(() -> new BankAccountNotFoundException(bankAccountId));
 
         return bankAccountMapper.toResponse(bankAccount);
     }
