@@ -5,10 +5,8 @@ import org.springframework.stereotype.Service;
 import pl.jdldev.bankapp.account.domain.AccountStatus;
 import pl.jdldev.bankapp.account.domain.BankAccount;
 import pl.jdldev.bankapp.account.domain.CurrencyCode;
-import pl.jdldev.bankapp.common.exception.WrongTransactionDestinationException;
+import pl.jdldev.bankapp.common.exception.*;
 import pl.jdldev.bankapp.account.infrastructure.BankAccountRepository;
-import pl.jdldev.bankapp.common.exception.BankAccountNotFoundException;
-import pl.jdldev.bankapp.common.exception.TooSmallAccountBalanceToMakeTransaction;
 import pl.jdldev.bankapp.transaction.api.CreateTransactionRequest;
 import pl.jdldev.bankapp.transaction.domain.Transaction;
 import pl.jdldev.bankapp.transaction.infrastructure.TransactionRepository;
@@ -50,11 +48,18 @@ public class TransactionService {
         AccountStatus destinationAccountStatus = destinationBankAccount.getStatus();
 
         if(!isAccountStatusActive(sourceAccountStatus)){
-            throw
+            throw new NotActiveAccountException(sourceAccountId, sourceAccountStatus);
         }
 
         if(!isAccountStatusActive(destinationAccountStatus)) {
+            throw new NotActiveAccountException(destinationAccountId, destinationAccountStatus);
+        }
 
+        CurrencyCode sourceAccountCurrency =  sourceBankAccount.getCurrency();
+        CurrencyCode destinationAccountCurrency =  destinationBankAccount.getCurrency();
+
+        if(!isCurrencyTransactionSameOnBothAccounts(sourceAccountCurrency, destinationAccountCurrency)) {
+            throw new DifferentCurrencyCodeException(sourceAccountCurrency, destinationAccountCurrency);
         }
 
     }
@@ -75,6 +80,4 @@ public class TransactionService {
     private boolean isCurrencyTransactionSameOnBothAccounts(CurrencyCode sourceAccount, CurrencyCode destinationAccount) {
         return sourceAccount.equals(destinationAccount);
     }
-
-
 }
