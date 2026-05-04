@@ -129,8 +129,18 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(WrongTransactionDestinationException.class)
+    public ResponseEntity<ErrorResponse> handleWrongTransactionDestinationException(WrongTransactionDestinationException e, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                e.getMessage(),
+                request.getRequestURI()
+        );
 
-
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e, HttpServletRequest request) {
